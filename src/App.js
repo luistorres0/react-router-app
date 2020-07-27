@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
-import Home from "./pages/LoginPage";
-import Stories from "./pages/UserListPage";
+import UserListPage from "./pages/UserListPage";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
@@ -9,10 +9,10 @@ function App() {
       <main>
         <Switch>
           <Route path="/" exact>
-            <Home />
+            <LoginPage />
           </Route>
-          <Route path="/:id/list" exact>
-            <Stories />
+          <Route path="/:email/list" exact>
+            <UserListPage />
           </Route>
           <Redirect to="/" />
         </Switch>

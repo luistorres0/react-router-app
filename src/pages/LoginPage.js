@@ -1,20 +1,37 @@
 import React, { useState } from "react";
 import "./LoginPage.css";
-import { Redirect } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
+import DUMMY_DATA from "./dummydata";
+import UserListPage from "./UserListPage";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [toListPage, setToListPage] = useState(false);
+  const [isSigningUp, setIsSigningUp] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const onSubmitHandler = (event) => {
     event.preventDefault();
-    const userLogin = {
-        email,
-        password
+    if (!isSigningUp) {
+      let foundUser = DUMMY_DATA.find((user) => user.email === email);
+      if(foundUser) {
+          setIsAuthenticated(true);
+          setToListPage(true);
+      } else {
+          setIsSigningUp(true);
+      }
+    } else {
+        let newAccount = {
+            id: Math.random().toString(),
+            email: email,
+            password: password,
+            listItems: []
+        }
+        DUMMY_DATA.push(newAccount);
+        setIsAuthenticated(true);
+        setToListPage(true);
     }
-    console.log(userLogin);
-    setToListPage(true);
   };
 
   const onEmailChangehandler = (event) => {
@@ -25,10 +42,12 @@ const LoginPage = () => {
     setPassword(event.target.value);
   };
 
+  const prompt = isSigningUp ? "up" : "in";
+
   return (
     <div className="my-login-container">
       <form className="form-signin" onSubmit={onSubmitHandler}>
-        <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
+        <h1 className="h3 mb-3 font-weight-normal">{"Please Sign " + prompt}</h1>
         <label htmlFor="inputEmail" className="sr-only">
           Email address
         </label>
@@ -55,11 +74,11 @@ const LoginPage = () => {
           value={password}
         />
         <button className="btn btn-lg btn-primary btn-block" type="submit">
-          Sign in
+        {"Sign " + prompt}
         </button>
         <p className="mt-5 mb-3 text-muted">&copy; 2017-2020</p>
       </form>
-      {toListPage && <Redirect to={`/${email}/list`} />}
+      {toListPage && isAuthenticated && <Redirect to={`/${email}/list`} />}
     </div>
   );
 };
