@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/luistorres0/todoList.git/static/css/main.7bd8574c.chunk.css",
+    "main.js": "/luistorres0/todoList.git/static/js/main.ef6dad34.chunk.js",
+    "main.js.map": "/luistorres0/todoList.git/static/js/main.ef6dad34.chunk.js.map",
+    "runtime-main.js": "/luistorres0/todoList.git/static/js/runtime-main.6ca898fc.js",
+    "runtime-main.js.map": "/luistorres0/todoList.git/static/js/runtime-main.6ca898fc.js.map",
+    "static/js/2.2ac06bc9.chunk.js": "/luistorres0/todoList.git/static/js/2.2ac06bc9.chunk.js",
+    "static/js/2.2ac06bc9.chunk.js.map": "/luistorres0/todoList.git/static/js/2.2ac06bc9.chunk.js.map",
+    "index.html": "/luistorres0/todoList.git/index.html",
+    "precache-manifest.7728d6ba97785af2b6403fdeadd5ed48.js": "/luistorres0/todoList.git/precache-manifest.7728d6ba97785af2b6403fdeadd5ed48.js",
+    "service-worker.js": "/luistorres0/todoList.git/service-worker.js",
+    "static/css/main.7bd8574c.chunk.css.map": "/luistorres0/todoList.git/static/css/main.7bd8574c.chunk.css.map",
+    "static/js/2.2ac06bc9.chunk.js.LICENSE.txt": "/luistorres0/todoList.git/static/js/2.2ac06bc9.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.6ca898fc.js",
+    "static/js/2.2ac06bc9.chunk.js",
+    "static/css/main.7bd8574c.chunk.css",
+    "static/js/main.ef6dad34.chunk.js"
+  ]
+}
