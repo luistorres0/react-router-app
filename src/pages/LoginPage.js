@@ -1,36 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./LoginPage.css";
-import { Route, Redirect } from "react-router-dom";
 import DUMMY_DATA from "./dummydata";
-import UserListPage from "./UserListPage";
+import { AuthContext } from "../context/auth-context";
+import { CurrentUserContext } from "../context/current-user-context";
 
 const LoginPage = () => {
+  const currentUser = useContext(CurrentUserContext);
+  const auth = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [toListPage, setToListPage] = useState(false);
-  const [isSigningUp, setIsSigningUp] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoginMode, setIsLoginMode] = useState(true);
 
   const onSubmitHandler = (event) => {
     event.preventDefault();
-    if (!isSigningUp) {
+    if (isLoginMode) {
       let foundUser = DUMMY_DATA.find((user) => user.email === email);
-      if(foundUser) {
-          setIsAuthenticated(true);
-          setToListPage(true);
+      if (foundUser) {
+        currentUser.setCurrentUserEmail(foundUser.email);
+        auth.login();
       } else {
-          setIsSigningUp(true);
+        alert("User not found. Try again or please sign up.");
       }
     } else {
-        let newAccount = {
-            id: Math.random().toString(),
-            email: email,
-            password: password,
-            listItems: []
-        }
-        DUMMY_DATA.push(newAccount);
-        setIsAuthenticated(true);
-        setToListPage(true);
+      let newAccount = {
+        id: Math.random().toString(),
+        email: email,
+        password: password,
+        listItems: [],
+      };
+      DUMMY_DATA.push(newAccount);
+      auth.login();
     }
   };
 
@@ -42,7 +41,7 @@ const LoginPage = () => {
     setPassword(event.target.value);
   };
 
-  const prompt = isSigningUp ? "up" : "in";
+  const prompt = isLoginMode ? "in" : "up";
 
   return (
     <div className="my-login-container">
@@ -74,11 +73,11 @@ const LoginPage = () => {
           value={password}
         />
         <button className="btn btn-lg btn-primary btn-block" type="submit">
-        {"Sign " + prompt}
+          {"Sign " + prompt}
         </button>
         <p className="mt-5 mb-3 text-muted">&copy; 2017-2020</p>
       </form>
-      {toListPage && isAuthenticated && <Redirect to={`/${email}/list`} />}
+      {/* {toListPage && isAuthenticated && <Redirect to={`/${email}/list`} />} */}
     </div>
   );
 };

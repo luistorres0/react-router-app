@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import "./UserListPage.css";
 import DUMMY_DATA from "./dummydata.js";
+import { CurrentUserContext } from "../context/current-user-context";
 
 const UserListPage = () => {
-  const { email } = useParams();
-  const foundUser = DUMMY_DATA.find((user) => user.email === email);
+  const currentUser = useContext(CurrentUserContext);
+  const foundUser = DUMMY_DATA.find((user) => user.email === currentUser.currentUserEmail);
   let listContent = <h2>User Not Found</h2>;
   if (foundUser) {
     listContent = foundUser.listItems.map((item, index) => {
