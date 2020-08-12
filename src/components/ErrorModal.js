@@ -6,11 +6,11 @@ import "./ErrorModal.css";
 
 const ErrorModal = (props) => {
   return (
-    <Modal centered show={props.showModal} onHide={props.hideModal}>
-      <Modal.Header><h5>Oops! Something went wrong.</h5></Modal.Header>
+    <Modal size="sm" centered show={props.showModal} onHide={props.hideModal}>
+      <Modal.Header className={"bg-light"}><h5>Oops!</h5></Modal.Header>
       <Modal.Body>{props.errorMessage}</Modal.Body>
-      <Modal.Footer>
-        <Button onClick={props.hideModal}>Close</Button>
+      <Modal.Footer className={"bg-light text-white"}>
+        <Button variant="outline-primary" onClick={props.hideModal}>Close</Button>
       </Modal.Footer>
     </Modal>
   );

@@ -15,12 +15,12 @@ const LoginPage = () => {
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
+
+    setIsLoading(true);
+
     if (isLoginMode) {
-      // logic for login mode...
-    } else {
       try {
-        setIsLoading(true);
-        const response = await fetch("http://localhost:5001/api/users/signup", {
+        const response = await fetch("http://localhost:5001/api/users/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -38,6 +38,34 @@ const LoginPage = () => {
         }
 
         console.log(responseData);
+
+        setIsLoading(false);
+
+        // auth.login();
+      } catch (err) {
+        setIsLoading(false);
+        setError(err.message || "Please try again.");
+        setShowErrorModal(true);
+        console.log(err);
+      }
+    } else {
+      try {
+        const response = await fetch("http://localhost:5001/api/users/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        });
+
+        const responseData = await response.json();
+
+        if (!response.ok) {
+          throw new Error(responseData.message);
+        }
 
         setIsLoading(false);
 
