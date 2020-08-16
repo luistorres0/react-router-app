@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 import "./UserListPage.css";
 import { useState } from "react";
@@ -34,18 +34,18 @@ const UserListPage = () => {
   if (todoList) {
     listItems = todoList.list.map((item, index) => (
       <ListGroup.Item key={uuidv4()} className="text-left">
-      <span className="row px-3">
-        {item}
-        <button
-          type="button"
-          // onClick={() => onDelete(item)}
-          variant="light"
-          className="ml-auto list-selection-page-delete"
-        >
-          <span>x</span>
-        </button>
-      </span>
-    </ListGroup.Item>
+        <span className="row px-3">
+          {item}
+          <button
+            type="button"
+            onClick={() => onDelete(item)}
+            variant="light"
+            className="ml-auto list-selection-page-delete"
+          >
+            <span>x</span>
+          </button>
+        </span>
+      </ListGroup.Item>
     ));
 
     if (listItems.length === 0) {
@@ -59,6 +59,25 @@ const UserListPage = () => {
 
   const onAdd = async (newItem) => {
     const newList = [...todoList.list, newItem];
+
+    try {
+      await sendRequest(
+        `http://localhost:5001/api/lists/${listId}`,
+        "PATCH",
+        JSON.stringify({
+          newList,
+        }),
+        {
+          "Content-Type": "application/json",
+        }
+      );
+    } catch (err) {}
+
+    fetchList();
+  };
+
+  const onDelete = async (deletedItem) => {
+    const newList = todoList.list.filter((item) => item !== deletedItem);
 
     try {
       await sendRequest(
