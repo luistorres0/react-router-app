@@ -20,7 +20,7 @@ const LoginPage = () => {
 
     if (isLoginMode) {
       try {
-        await sendRequest(
+        const responseData = await sendRequest(
           "http://localhost:5001/api/users/login",
           "POST",
           JSON.stringify({
@@ -33,11 +33,11 @@ const LoginPage = () => {
         );
 
         setToListSelectionPage(true);
-        auth.login();
+        auth.login(responseData.user.id);
       } catch (err) {}
     } else {
       try {
-        await sendRequest(
+        const responseData = await sendRequest(
           "http://localhost:5001/api/users/signup",
           "POST",
           JSON.stringify({
@@ -50,7 +50,7 @@ const LoginPage = () => {
         );
 
         setToListSelectionPage(true);
-        auth.login();
+        auth.login(responseData.user.id);
       } catch (err) {}
     }
   };

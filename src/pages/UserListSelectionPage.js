@@ -1,17 +1,20 @@
 import React from "react";
+import { useState } from "react";
+import { useEffect } from "react";
+import { useCallback } from "react";
+import { useContext } from "react";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
 
 import "./UserListSelectionPage.css";
-import { useState } from "react";
-import { useEffect } from "react";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ErrorModal from "../components/ErrorModal";
 import AddList from "../components/AddList";
 import { useHttpClient } from "../hooks/http-hook";
-import { useCallback } from "react";
+import { AuthContext } from "../context/auth-context";
 
 const UserListSelectionPage = (props) => {
+  const auth = useContext(AuthContext);
   const [loadedLists, setLoadingLists] = useState([]);
   const [isAddListMode, setIsAddListMode] = useState(false);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -19,12 +22,12 @@ const UserListSelectionPage = (props) => {
   const fetchLists = useCallback(async () => {
     try {
       const responseData = await sendRequest(
-        "http://localhost:5001/api/lists/all/5f32c2104a1bb0580479b433" //3
+        `http://localhost:5001/api/lists/all/${auth.userId}`
       );
 
       setLoadingLists(responseData);
     } catch (err) {}
-  }, [sendRequest]);
+  }, [sendRequest, auth.userId]);
 
   useEffect(() => {
     fetchLists();
@@ -36,11 +39,10 @@ const UserListSelectionPage = (props) => {
         "http://localhost:5001/api/lists",
         "POST",
         JSON.stringify({
-          authorId: "5f32c2104a1bb0580479b433",
+          authorId: auth.userId,
           title,
           list: [],
         }),
-
         {
           "Content-Type": "application/json",
         }
