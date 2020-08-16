@@ -21,12 +21,12 @@ const UserListSelectionPage = (props) => {
 
   const fetchLists = useCallback(async () => {
     try {
-      const responseData = await sendRequest(
-        `http://localhost:5001/api/lists/all/${auth.userId}`
-      );
+      const responseData = await sendRequest(`http://localhost:5001/api/lists/all/${auth.userId}`);
 
       setLoadingLists(responseData);
-    } catch (err) {}
+    } catch (err) {
+      setLoadingLists([]);
+    }
   }, [sendRequest, auth.userId]);
 
   useEffect(() => {
@@ -52,33 +52,43 @@ const UserListSelectionPage = (props) => {
     fetchLists();
   };
 
-  let listItems = <ListGroup.Item>Please create a list</ListGroup.Item>;
-  if (!isLoading && loadedLists.length !== 0)
-    listItems = loadedLists.map((list, index) => (
-      <ListGroup.Item key={index} className="text-left">
-        <span className="row px-3">
-          {list.title}
-          <button variant="light" className="ml-auto list-selection-page-delete">
-            <span>x</span>
-          </button>
-        </span>
-      </ListGroup.Item>
-    ));
+  const onDelete = async (listId) => {
+    try {
+      await sendRequest(`http://localhost:5001/api/lists/${listId}`, "DELETE");
+      fetchLists();
+    } catch (err) {
+      fetchLists();
+    }
+  };
+
+  const listItems = loadedLists.map((list) => (
+    <ListGroup.Item key={list.id} className="text-left">
+      <span className="row px-3">
+        {list.title}
+        <button
+          type="button"
+          onClick={() => onDelete(list.id)}
+          variant="light"
+          className="ml-auto list-selection-page-delete"
+        >
+          <span>x</span>
+        </button>
+      </span>
+    </ListGroup.Item>
+  ));
+
+  let emptyListItem = <ListGroup.Item><em>Create a list.</em></ListGroup.Item>;
 
   return (
     <div className="list-selection-page-container">
       <ErrorModal showModal={error} errorMessage={error} hideModal={clearError} />
-      {isLoading && (
-        <div>
-          <LoadingSpinner />
-        </div>
-      )}
       <Card className="list-selection-page-list">
         <Card.Header>
           <h3>Your Lists</h3>
         </Card.Header>
         <ListGroup variant="flush">
           {listItems}
+          {listItems.length === 0 && emptyListItem}
           <AddList
             isAddListMode={isAddListMode}
             onSetAddModeOff={() => setIsAddListMode(false)}
@@ -86,6 +96,11 @@ const UserListSelectionPage = (props) => {
             onAddList={onAdd}
           />
         </ListGroup>
+        {isLoading && (
+          <div>
+            <LoadingSpinner />
+          </div>
+        )}
       </Card>{" "}
     </div>
   );

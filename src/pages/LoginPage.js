@@ -1,5 +1,4 @@
 import React, { useState, useContext } from "react";
-import { Redirect } from "react-router-dom";
 
 import "./LoginPage.css";
 import { AuthContext } from "../context/auth-context";
@@ -12,7 +11,6 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoginMode, setIsLoginMode] = useState(true);
-  const [toListSelectionPage, setToListSelectionPage] = useState(false);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   const onSubmitHandler = async (event) => {
@@ -32,7 +30,6 @@ const LoginPage = () => {
           }
         );
 
-        setToListSelectionPage(true);
         auth.login(responseData.user.id);
       } catch (err) {}
     } else {
@@ -49,7 +46,6 @@ const LoginPage = () => {
           }
         );
 
-        setToListSelectionPage(true);
         auth.login(responseData.user.id);
       } catch (err) {}
     }
@@ -115,7 +111,7 @@ const LoginPage = () => {
           </button>
           <p className="mt-5 mb-3 text-muted">&copy; 2017-2020</p>
         </form>
-        {toListSelectionPage && <Redirect to={"/"} />}
+        {/* {toListSelectionPage && <Redirect to={"/"} />} */}
       </div>
     </React.Fragment>
   );
