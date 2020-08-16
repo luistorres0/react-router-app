@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { Redirect } from "react-router-dom";
 import "./LoginPage.css";
 import { AuthContext } from "../context/auth-context";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -10,8 +11,8 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState();
-  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [error, setError] = useState("");
+  const [toListSelectionPage, setToListSelectionPage] = useState(false);
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
@@ -37,15 +38,13 @@ const LoginPage = () => {
           throw new Error(responseData.message);
         }
 
-        console.log(responseData);
-
         setIsLoading(false);
 
-        // auth.login();
+        setToListSelectionPage(true);
+        auth.login();
       } catch (err) {
         setIsLoading(false);
         setError(err.message || "Please try again.");
-        setShowErrorModal(true);
         console.log(err);
       }
     } else {
@@ -69,11 +68,11 @@ const LoginPage = () => {
 
         setIsLoading(false);
 
-        // auth.login();
+        setToListSelectionPage(true);
+        auth.login();
       } catch (err) {
         setIsLoading(false);
         setError(err.message || "Please try again.");
-        setShowErrorModal(true);
         console.log(err);
       }
     }
@@ -96,9 +95,8 @@ const LoginPage = () => {
   return (
     <React.Fragment>
       <ErrorModal
-        showModal={showErrorModal}
-        errorMessage={error}
-        hideModal={() => setShowErrorModal(false)}
+        error={error}
+        hideModal={() => setError("")}
       />
       <div className="my-login-container">
         {isLoading && <LoadingSpinner asOverlay />}
@@ -143,7 +141,7 @@ const LoginPage = () => {
           </button>
           <p className="mt-5 mb-3 text-muted">&copy; 2017-2020</p>
         </form>
-        {/* {toListPage && isAuthenticated && <Redirect to={`/${email}/list`} />} */}
+        {toListSelectionPage && <Redirect to={"/"} />}
       </div>
     </React.Fragment>
   );

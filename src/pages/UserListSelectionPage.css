@@ -1,0 +1,28 @@
+.list-selection-page-container {
+  padding-top: 6rem;
+}
+
+.list-selection-page-list {
+  width: 18rem;
+  margin: auto;
+  border: none;
+}
+
+.list-selection-page-delete {
+  border: none;
+}
+
+.list-selection-page-delete:hover span {
+  display: none;
+}
+
+.list-selection-page-delete:hover {
+  padding-right: 0.5rem;
+  color: white;
+  background-color: rgba(100, 100, 100, 0.5);
+  transition: background-color 0.3s, padding-right 0.3s;
+}
+
+.list-selection-page-delete:hover:after {
+  content: "Delete";
+}

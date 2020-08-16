@@ -5,6 +5,7 @@ import LoginPage from "./pages/LoginPage";
 import { AuthContext } from "./context/auth-context";
 import MainNavigation from "./components/MainNavigation";
 import { CurrentUserContext } from "./context/current-user-context";
+import UserListSelectionPage from "./pages/UserListSelectionPage";
 
 function App() {
   const [loggedInUserEmail, setLoggedInUserEmail] = useState("");
@@ -30,13 +31,16 @@ function App() {
         <Route path="/auth" exact>
           <LoginPage />
         </Route>
-        <Redirect to="/auth" exact/>
+        <Redirect to="/auth" exact />
       </Switch>
     );
   } else {
     routes = (
       <Switch>
         <Route path="/" exact>
+          <UserListSelectionPage />
+        </Route>
+        <Route path="/list/:listId" exact>
           <UserListPage />
         </Route>
         <Redirect to="/" />

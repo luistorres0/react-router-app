@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import "./UserListPage.css";
 import DUMMY_DATA from "./dummydata.js";
 import { CurrentUserContext } from "../context/current-user-context";
