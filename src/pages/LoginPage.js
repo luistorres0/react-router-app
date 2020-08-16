@@ -1,80 +1,57 @@
 import React, { useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
+
 import "./LoginPage.css";
 import { AuthContext } from "../context/auth-context";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ErrorModal from "../components/ErrorModal";
+import { useHttpClient } from "../hooks/http-hook";
 
 const LoginPage = () => {
   const auth = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoginMode, setIsLoginMode] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
   const [toListSelectionPage, setToListSelectionPage] = useState(false);
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
 
-    setIsLoading(true);
-
     if (isLoginMode) {
       try {
-        const response = await fetch("http://localhost:5001/api/users/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
+        await sendRequest(
+          "http://localhost:5001/api/users/login",
+          "POST",
+          JSON.stringify({
             email: email,
             password: password,
           }),
-        });
-
-        const responseData = await response.json();
-
-        if (!response.ok) {
-          throw new Error(responseData.message);
-        }
-
-        setIsLoading(false);
+          {
+            "Content-Type": "application/json",
+          }
+        );
 
         setToListSelectionPage(true);
         auth.login();
-      } catch (err) {
-        setIsLoading(false);
-        setError(err.message || "Please try again.");
-        console.log(err);
-      }
+      } catch (err) {}
     } else {
       try {
-        const response = await fetch("http://localhost:5001/api/users/signup", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
+        await sendRequest(
+          "http://localhost:5001/api/users/signup",
+          "POST",
+          JSON.stringify({
             email: email,
             password: password,
           }),
-        });
-
-        const responseData = await response.json();
-
-        if (!response.ok) {
-          throw new Error(responseData.message);
-        }
-
-        setIsLoading(false);
+          {
+            "Content-Type": "application/json",
+          }
+        );
 
         setToListSelectionPage(true);
         auth.login();
-      } catch (err) {
-        setIsLoading(false);
-        setError(err.message || "Please try again.");
-        console.log(err);
-      }
+      } catch (err) {}
     }
   };
 
@@ -94,10 +71,7 @@ const LoginPage = () => {
 
   return (
     <React.Fragment>
-      <ErrorModal
-        error={error}
-        hideModal={() => setError("")}
-      />
+      <ErrorModal error={error} hideModal={clearError} />
       <div className="my-login-container">
         {isLoading && <LoadingSpinner asOverlay />}
 
