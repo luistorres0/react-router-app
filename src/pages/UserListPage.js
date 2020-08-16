@@ -1,17 +1,20 @@
 import React, { useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
+import {v4 as uuidv4} from "uuid";
 
 import "./UserListPage.css";
 import { useState } from "react";
-import { Card, ListGroup, Button } from "react-bootstrap";
+import { Card, ListGroup } from "react-bootstrap";
 import { useHttpClient } from "../hooks/http-hook";
 import ErrorModal from "../components/ErrorModal";
 import LoadingSpinner from "../components/LoadingSpinner";
+import AddItem from "../components/AddItem";
 
 const UserListPage = () => {
   const { listId } = useParams();
   const [todoList, setTodoList] = useState(null);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const [isAddMode, setIsAddMode] = useState(false);
 
   const fetchList = useCallback(async () => {
     try {
@@ -30,8 +33,21 @@ const UserListPage = () => {
   let listItems = [];
   if (todoList) {
     listItems = todoList.list.map((item, index) => (
-      <ListGroup.Item key={index}>{item}</ListGroup.Item>
+      <ListGroup.Item key={uuidv4()} className="text-left">
+      <span className="row px-3">
+        {item}
+        <button
+          type="button"
+          // onClick={() => onDelete(item)}
+          variant="light"
+          className="ml-auto list-selection-page-delete"
+        >
+          <span>x</span>
+        </button>
+      </span>
+    </ListGroup.Item>
     ));
+
     if (listItems.length === 0) {
       listItems = (
         <ListGroup.Item>
@@ -40,6 +56,25 @@ const UserListPage = () => {
       );
     }
   }
+
+  const onAdd = async (newItem) => {
+    const newList = [...todoList.list, newItem];
+
+    try {
+      await sendRequest(
+        `http://localhost:5001/api/lists/${listId}`,
+        "PATCH",
+        JSON.stringify({
+          newList,
+        }),
+        {
+          "Content-Type": "application/json",
+        }
+      );
+    } catch (err) {}
+
+    fetchList();
+  };
 
   return (
     <div className="list-page-container">
@@ -50,9 +85,14 @@ const UserListPage = () => {
         </Card.Header>
         <ListGroup variant="flush">
           {listItems}
-          <ListGroup.Item>
-            <Button variant="light">Add</Button>
-          </ListGroup.Item>
+          <AddItem
+            isAddMode={isAddMode}
+            onSetAddModeOff={() => setIsAddMode(false)}
+            onSetAddModeOn={() => setIsAddMode(true)}
+            onAddItem={onAdd}
+            buttonText="New Todo"
+            placeholderText="Enter a new Todo."
+          />
         </ListGroup>
         {isLoading && (
           <div>

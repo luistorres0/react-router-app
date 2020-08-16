@@ -10,9 +10,9 @@ import ListGroup from "react-bootstrap/ListGroup";
 import "./UserListSelectionPage.css";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ErrorModal from "../components/ErrorModal";
-import AddList from "../components/AddList";
 import { useHttpClient } from "../hooks/http-hook";
 import { AuthContext } from "../context/auth-context";
+import AddItem from "../components/AddItem";
 
 const UserListSelectionPage = (props) => {
   const auth = useContext(AuthContext);
@@ -99,11 +99,13 @@ const UserListSelectionPage = (props) => {
         <ListGroup variant="flush">
           {listItems}
           {listItems.length === 0 && emptyListItem}
-          <AddList
-            isAddListMode={isAddListMode}
+          <AddItem
+            isAddMode={isAddListMode}
             onSetAddModeOff={() => setIsAddListMode(false)}
             onSetAddModeOn={() => setIsAddListMode(true)}
-            onAddList={onAdd}
+            onAddItem={onAdd}
+            buttonText="New List"
+            placeholderText = "Enter a new title."
           />
         </ListGroup>
         {isLoading && (

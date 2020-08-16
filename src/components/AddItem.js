@@ -2,45 +2,45 @@ import React from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import "./AddList.css";
+import "./AddItem.css";
 import { useState } from "react";
 
-const AddList = (props) => {
-  const [title, setTitle] = useState("");
+const AddItem = (props) => {
+  const [inputValue, setInputValue] = useState("");
 
-  const onTitleChange = (event) => {
-    setTitle(event.target.value);
+  const onInputChange = (event) => {
+    setInputValue(event.target.value);
   };
 
   const onCancel = () => {
-    setTitle("");
+    setInputValue("");
     props.onSetAddModeOff();
   };
 
   const onAdd = () => {
-    props.onAddList(title);
-    setTitle("");
+    props.onAddItem(inputValue);
+    setInputValue("");
     props.onSetAddModeOff();
   };
 
   let renderedContent = (
     <ListGroup.Item className="border-0">
       <Button onClick={props.onSetAddModeOn} variant="light">
-        New List
+        {props.buttonText || "New"}
       </Button>
     </ListGroup.Item>
   );
 
-  if (props.isAddListMode) {
+  if (props.isAddMode) {
     renderedContent = (
       <div>
         <ListGroup.Item className="border-0">
           <Form.Control
             className="border-0 bg-light"
             type="text"
-            placeholder="Enter a title"
-            onChange={onTitleChange}
-            value={title}
+            placeholder={props.placeholderText || "Enter item name."}
+            onChange={onInputChange}
+            value={inputValue}
           ></Form.Control>
         </ListGroup.Item>
         <ListGroup.Item className="border-0">
@@ -58,4 +58,4 @@ const AddList = (props) => {
   return <div>{renderedContent}</div>;
 };
 
-export default AddList;
+export default AddItem;
