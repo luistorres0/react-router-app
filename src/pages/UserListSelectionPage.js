@@ -1,93 +1,53 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
+
 import "./UserListSelectionPage.css";
 import { useState } from "react";
 import { useEffect } from "react";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ErrorModal from "../components/ErrorModal";
 import AddList from "../components/AddList";
+import { useHttpClient } from "../hooks/http-hook";
+import { useCallback } from "react";
 
 const UserListSelectionPage = (props) => {
-  const [isLoading, setIsLoading] = useState(false);
   const [loadedLists, setLoadingLists] = useState([]);
-  const [error, setError] = useState("");
   const [isAddListMode, setIsAddListMode] = useState(false);
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
-  useEffect(() => {
-    const sendRequest = async () => {
-      setIsLoading(true);
-
-      try {
-        const response = await fetch(
-          "http://localhost:5001/api/lists/all/5f32c2104a1bb0580479b433" //3
-        );
-
-        const responseData = await response.json();
-
-        if (!response.ok) {
-          throw new Error(responseData.message);
-        }
-
-        setLoadingLists(responseData);
-      } catch (err) {
-        setError(err.message);
-      }
-
-      setIsLoading(false);
-    };
-
-    sendRequest();
-  }, []);
-
-  const loadLists = async () => {
-    setIsLoading(true);
-
+  const fetchLists = useCallback(async () => {
     try {
-      const response = await fetch(
+      const responseData = await sendRequest(
         "http://localhost:5001/api/lists/all/5f32c2104a1bb0580479b433" //3
       );
 
-      const responseData = await response.json();
-
-      if (!response.ok) {
-        throw new Error(responseData.message);
-      }
-
       setLoadingLists(responseData);
-    } catch (err) {
-      setError(err.message);
-    }
+    } catch (err) {}
+  }, [sendRequest]);
 
-    setIsLoading(false);
-  };
+  useEffect(() => {
+    fetchLists();
+  }, [fetchLists]);
 
   const onAdd = async (title) => {
     try {
-      const response = await fetch("http://localhost:5001/api/lists", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      await sendRequest(
+        "http://localhost:5001/api/lists",
+        "POST",
+        JSON.stringify({
           authorId: "5f32c2104a1bb0580479b433",
           title,
           list: [],
         }),
-      });
 
-      const responseData = await response.json();
+        {
+          "Content-Type": "application/json",
+        }
+      );
+    } catch (err) {}
 
-      if (!response.ok) {
-        throw new Error(responseData.message);
-      }
-
-      console.log(responseData);
-    } catch (err) {
-      console.log(err.message);
-    }
-
-    loadLists();
+    fetchLists();
   };
 
   let listItems = <ListGroup.Item>Please create a list</ListGroup.Item>;
@@ -105,7 +65,7 @@ const UserListSelectionPage = (props) => {
 
   return (
     <div className="list-selection-page-container">
-      <ErrorModal showModal={error} errorMessage={error} hideModal={() => setError("")} />
+      <ErrorModal showModal={error} errorMessage={error} hideModal={clearError} />
       {isLoading && (
         <div>
           <LoadingSpinner />
