@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useContext } from "react";
+import { useHistory } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
 
@@ -15,6 +16,7 @@ import { AuthContext } from "../context/auth-context";
 
 const UserListSelectionPage = (props) => {
   const auth = useContext(AuthContext);
+  const history = useHistory();
   const [loadedLists, setLoadingLists] = useState([]);
   const [isAddListMode, setIsAddListMode] = useState(false);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -61,8 +63,12 @@ const UserListSelectionPage = (props) => {
     }
   };
 
+  const onListSelect = async (listId) => {
+    history.push(`/list/${listId}`);
+  };
+
   const listItems = loadedLists.map((list) => (
-    <ListGroup.Item key={list.id} className="text-left">
+    <ListGroup.Item key={list.id} className="text-left" onClick={() => onListSelect(list.id)}>
       <span className="row px-3">
         {list.title}
         <button
@@ -77,7 +83,11 @@ const UserListSelectionPage = (props) => {
     </ListGroup.Item>
   ));
 
-  let emptyListItem = <ListGroup.Item><em>Create a list.</em></ListGroup.Item>;
+  let emptyListItem = (
+    <ListGroup.Item>
+      <em>Create a list.</em>
+    </ListGroup.Item>
+  );
 
   return (
     <div className="list-selection-page-container">
@@ -101,7 +111,7 @@ const UserListSelectionPage = (props) => {
             <LoadingSpinner />
           </div>
         )}
-      </Card>{" "}
+      </Card>
     </div>
   );
 };

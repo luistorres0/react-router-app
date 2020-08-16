@@ -1,27 +1,29 @@
-.my-list-group-container {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: #f5f5f5;
-}
-
-.my-list-group-container li {
-    text-align: left;
-}
-
-.my-list-group-container h2 {
-    display: block;
-}
-
-.my-list-group-container input {
+.list-page-container {
+    padding-top: 6rem;
+  }
+  
+  .list-page-list {
+    width: 18rem;
+    margin: auto;
     border: none;
-}
-
-.my-list-group-container input:focus {
-    outline: none;
-}
-.my-list-group-container button {
-    border-radius: 50%;
-}
+  }
+  
+  .list-page-delete {
+    border: none;
+  }
+  
+  .list-page-delete:hover span {
+    display: none;
+  }
+  
+  .list-page-delete:hover {
+    padding-right: 0.5rem;
+    color: white;
+    background-color: rgba(100, 100, 100, 0.5);
+    transition: background-color 0.3s, padding-right 0.3s;
+  }
+  
+  .list-page-delete:hover:after {
+    content: "Delete";
+  }
+  
