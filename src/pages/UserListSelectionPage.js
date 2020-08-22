@@ -23,13 +23,20 @@ const UserListSelectionPage = (props) => {
 
   const fetchLists = useCallback(async () => {
     try {
-      const responseData = await sendRequest(`http://localhost:5001/api/lists/all/${auth.userId}`);
+      const responseData = await sendRequest(
+        `http://localhost:5001/api/lists/all/${auth.userId}`,
+        "GET",
+        null,
+        {
+          Authorization: "Bearer " + auth.token,
+        }
+      );
 
       setLoadingLists(responseData);
     } catch (err) {
       setLoadingLists([]);
     }
-  }, [sendRequest, auth.userId]);
+  }, [sendRequest, auth.userId, auth.token]);
 
   useEffect(() => {
     fetchLists();
@@ -47,6 +54,7 @@ const UserListSelectionPage = (props) => {
         }),
         {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + auth.token,
         }
       );
     } catch (err) {}
@@ -56,7 +64,9 @@ const UserListSelectionPage = (props) => {
 
   const onDelete = async (listId) => {
     try {
-      await sendRequest(`http://localhost:5001/api/lists/${listId}`, "DELETE");
+      await sendRequest(`http://localhost:5001/api/lists/${listId}`, "DELETE", null, {
+        Authorization: "Bearer " + auth.token
+      });
       fetchLists();
     } catch (err) {
       fetchLists();
@@ -68,18 +78,22 @@ const UserListSelectionPage = (props) => {
   };
 
   const listItems = loadedLists.map((list) => (
-    <ListGroup.Item key={list.id} className="text-left" onClick={() => onListSelect(list.id)}>
-      <span className="row px-3">
-        {list.title}
-        <button
-          type="button"
-          onClick={() => onDelete(list.id)}
-          variant="light"
-          className="ml-auto list-selection-page-delete"
-        >
-          <span>x</span>
-        </button>
-      </span>
+    <ListGroup.Item key={list.id} className="text-left">
+      <div className="row px-3">
+        <div className="col-10" onClick={() => onListSelect(list.id)}>
+          {list.title}
+        </div>
+        <div className="col">
+          <button
+            type="button"
+            onClick={() => onDelete(list.id)}
+            variant="light"
+            className="ml-auto list-selection-page-delete"
+          >
+            <span>x</span>
+          </button>
+        </div>
+      </div>
     </ListGroup.Item>
   ));
 
@@ -105,7 +119,7 @@ const UserListSelectionPage = (props) => {
             onSetAddModeOn={() => setIsAddListMode(true)}
             onAddItem={onAdd}
             buttonText="New List"
-            placeholderText = "Enter a new title."
+            placeholderText="Enter a new title."
           />
         </ListGroup>
         {isLoading && (

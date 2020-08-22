@@ -9,22 +9,32 @@ import { useHttpClient } from "../hooks/http-hook";
 import ErrorModal from "../components/ErrorModal";
 import LoadingSpinner from "../components/LoadingSpinner";
 import AddItem from "../components/AddItem";
+import { useContext } from "react";
+import { AuthContext } from "../context/auth-context";
 
 const UserListPage = () => {
   const { listId } = useParams();
   const [todoList, setTodoList] = useState(null);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [isAddMode, setIsAddMode] = useState(false);
+  const auth = useContext(AuthContext);
 
   const fetchList = useCallback(async () => {
     try {
-      const responseData = await sendRequest(`http://localhost:5001/api/lists/${listId}`);
+      const responseData = await sendRequest(
+        `http://localhost:5001/api/lists/${listId}`,
+        "GET",
+        null,
+        {
+          Authorization: "Bearer " + auth.token,
+        }
+      );
 
       setTodoList(responseData);
     } catch (err) {
       setTodoList(null);
     }
-  }, [sendRequest, listId]);
+  }, [sendRequest, listId, auth.token]);
 
   useEffect(() => {
     fetchList();
@@ -69,6 +79,7 @@ const UserListPage = () => {
         }),
         {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + auth.token,
         }
       );
     } catch (err) {}
@@ -88,6 +99,7 @@ const UserListPage = () => {
         }),
         {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + auth.token,
         }
       );
     } catch (err) {}
