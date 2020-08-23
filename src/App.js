@@ -5,20 +5,30 @@ import LoginPage from "./pages/LoginPage";
 import { AuthContext } from "./context/auth-context";
 import MainNavigation from "./components/MainNavigation";
 import UserListSelectionPage from "./pages/UserListSelectionPage";
+import { useEffect } from "react";
 
 function App() {
   const [userId, setUserId] = useState(null);
   const [token, setToken] = useState(null);
 
   const login = useCallback((uid, token) => {
-    setToken(token);
     setUserId(uid);
+    setToken(token);
+    localStorage.setItem("userData", JSON.stringify({ userId: uid, token: token }));
   }, []);
 
   const logout = useCallback(() => {
-    setToken(null);
     setUserId(null);
+    setToken(null);
+    localStorage.removeItem("userData");
   }, []);
+
+  useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem("userData"));
+    if (storedData && storedData.token) {
+      login(storedData.userId, storedData.token);
+    }
+  }, [login]);
 
   let routes;
 
@@ -46,7 +56,9 @@ function App() {
   }
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn: !!token, token: token, userId: userId, login: login, logout: logout }}>
+    <AuthContext.Provider
+      value={{ isLoggedIn: !!token, token: token, userId: userId, login: login, logout: logout }}
+    >
       <Router>
         <MainNavigation />
         <main>{routes}</main>
