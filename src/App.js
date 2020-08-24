@@ -7,14 +7,18 @@ import MainNavigation from "./components/MainNavigation";
 import UserListSelectionPage from "./pages/UserListSelectionPage";
 import { useEffect } from "react";
 
+let logoutTimer;
+
 function App() {
   const [userId, setUserId] = useState(null);
   const [token, setToken] = useState(null);
+  const [tokenExpirationDate, setTokenExpirationDate] = useState();
 
   const login = useCallback((uid, token, expirationDate) => {
     setUserId(uid);
     setToken(token);
     const tokenExpirationDate = expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
+    setTokenExpirationDate(tokenExpirationDate);
     localStorage.setItem(
       "userData",
       JSON.stringify({ userId: uid, token: token, expiration: tokenExpirationDate.toISOString() })
@@ -24,6 +28,7 @@ function App() {
   const logout = useCallback(() => {
     setUserId(null);
     setToken(null);
+    setTokenExpirationDate(null);
     localStorage.removeItem("userData");
   }, []);
 
@@ -33,6 +38,15 @@ function App() {
       login(storedData.userId, storedData.token, new Date(storedData.expiration));
     }
   }, [login]);
+
+  useEffect(() => {
+    if (token && tokenExpirationDate) {
+      const remainingTime = tokenExpirationDate.getTime() - new Date().getTime();
+      logoutTimer = setTimeout(logout, remainingTime);
+    } else {
+      clearTimeout(logoutTimer);
+    }
+  }, [token, logout, tokenExpirationDate]);
 
   let routes;
 
