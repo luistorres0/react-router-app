@@ -1,10 +1,13 @@
 import React, { useContext } from "react";
+import Navbar from "react-bootstrap/Navbar";
+
 import "./MainNavigation.css";
 import { NavLink, useHistory } from "react-router-dom";
 import { AuthContext } from "../context/auth-context";
 import { useHttpClient } from "../hooks/http-hook";
 import LoadingSpinner from "./LoadingSpinner";
 import ErrorModal from "./ErrorModal";
+import { Nav, NavDropdown, Button } from "react-bootstrap";
 
 const MainNavigation = () => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -21,17 +24,38 @@ const MainNavigation = () => {
     } catch (err) {}
   };
 
-  console.log(auth.name);
-
   return (
     <div>
       <ErrorModal error={error} hideModal={clearError} />
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <Navbar bg="light" expand="lg">
         <NavLink to="/" className="navbar-brand">
-          {auth.name ? "Welcome " + auth.name : "Todolist"}
+          Todolist
+        </NavLink>
+        {auth.isLoggedIn && <Navbar.Toggle aria-controls="basic-navbar-nav" />}
+        {auth.isLoggedIn && (
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="ml-auto">
+              <Button variant="light" type="button" onClick={() => history.push("/")}>
+                Home
+              </Button>
+              <NavDropdown title="Account" id="basic-nav-dropdown">
+                <NavDropdown.Item href="#" onClick={onDeleteAccount}>
+                  Close Account
+                </NavDropdown.Item>
+              </NavDropdown>
+              <Button variant="light" type="button" onClick={auth.logout}>
+                Logout
+              </Button>
+            </Nav>
+          </Navbar.Collapse>
+        )}
+      </Navbar>
+      {/* <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <NavLink to="/" className="navbar-brand">
+          Todolist
         </NavLink>
         <ul className="navbar-nav ml-auto">
-        <li className="nav-item mx-1">
+          <li className="nav-item mx-1">
             {auth.isLoggedIn && (
               <button onClick={() => history.push("/")} className="btn btn-light">
                 Home
@@ -53,7 +77,7 @@ const MainNavigation = () => {
             )}
           </li>
         </ul>
-      </nav>
+      </nav> */}
       {isLoading && <LoadingSpinner asOverlay />}
     </div>
   );
