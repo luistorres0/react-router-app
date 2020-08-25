@@ -10,6 +10,7 @@ const LoginPage = () => {
   const auth = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("")
   const [isLoginMode, setIsLoginMode] = useState(true);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
@@ -30,7 +31,7 @@ const LoginPage = () => {
           }
         );
 
-        auth.login(responseData.userId, responseData.token);
+        auth.login(responseData.userId, responseData.name, responseData.token);
       } catch (err) {}
     } else {
       try {
@@ -38,6 +39,7 @@ const LoginPage = () => {
           "http://localhost:5001/api/users/signup",
           "POST",
           JSON.stringify({
+            name: name,
             email: email,
             password: password,
           }),
@@ -46,7 +48,7 @@ const LoginPage = () => {
           }
         );
 
-        auth.login(responseData.userId, responseData.token);
+        auth.login(responseData.userId, responseData.name, responseData.token);
       } catch (err) {}
     }
   };
@@ -58,6 +60,11 @@ const LoginPage = () => {
   const onPasswordChangehandler = (event) => {
     setPassword(event.target.value);
   };
+
+  const onNameChangehandler = (event) => {
+    setName(event.target.value);
+  };
+
 
   const switchModeHandler = () => {
     setIsLoginMode((prevState) => !prevState);
@@ -73,6 +80,23 @@ const LoginPage = () => {
 
         <form className="form-signin" onSubmit={onSubmitHandler}>
           <h1 className="h3 mb-3 font-weight-normal">{"Please Sign " + prompt}</h1>
+          {!isLoginMode && (
+            <React.Fragment>
+              <label htmlFor="inputEmail" className="sr-only">
+                Name
+              </label>
+              <input
+                type="text"
+                id="inputName"
+                className="form-control"
+                placeholder="Name"
+                required
+                autoFocus
+                onChange={onNameChangehandler}
+                value={name}
+              />{" "}
+            </React.Fragment>
+          )}
           <label htmlFor="inputEmail" className="sr-only">
             Email address
           </label>

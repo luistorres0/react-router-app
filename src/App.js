@@ -8,7 +8,7 @@ import UserListSelectionPage from "./pages/UserListSelectionPage";
 import { useAuth } from "./hooks/auth-hook";
 
 function App() {
-  const { token, login, logout, userId } = useAuth();
+  const { token, login, logout, userId, name } = useAuth();
 
   let routes;
 
@@ -37,7 +37,14 @@ function App() {
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn: !!token, token: token, userId: userId, login: login, logout: logout }}
+      value={{
+        isLoggedIn: !!token,
+        token: token,
+        userId: userId,
+        name: name,
+        login: login,
+        logout: logout,
+      }}
     >
       <Router>
         <MainNavigation />
