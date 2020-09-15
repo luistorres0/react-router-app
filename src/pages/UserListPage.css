@@ -1,5 +1,5 @@
 .list-page-container {
-    padding-top: 6rem;
+    padding-top: 2rem;
   }
   
   .list-page-list {
@@ -7,23 +7,4 @@
     margin: auto;
     border: none;
   }
-  
-  .list-page-delete {
-    border: none;
-  }
-  
-  .list-page-delete:hover span {
-    display: none;
-  }
-  
-  .list-page-delete:hover {
-    padding-right: 0.5rem;
-    color: white;
-    background-color: rgba(100, 100, 100, 0.5);
-    transition: background-color 0.3s, padding-right 0.3s;
-  }
-  
-  .list-page-delete:hover:after {
-    content: "Delete";
-  }
-  
+    

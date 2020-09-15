@@ -38,3 +38,18 @@
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+.not-valid {
+  background: rgb(235, 191, 191);
+}
+
+.errorText {
+  color: red;
+  font-size: 0.9rem;
+}
+
+.form-signin button[type="submit"]:disabled {
+  cursor: not-allowed;
+  border: none;
+  background-color: lightgrey;
+}

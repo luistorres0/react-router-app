@@ -13,6 +13,7 @@ import ErrorModal from "../components/ErrorModal";
 import { useHttpClient } from "../hooks/http-hook";
 import { AuthContext } from "../context/auth-context";
 import AddItem from "../components/AddItem";
+import HeaderCard from "../components/HeaderCard";
 
 const UserListSelectionPage = (props) => {
   const auth = useContext(AuthContext);
@@ -65,7 +66,7 @@ const UserListSelectionPage = (props) => {
   const onDelete = async (listId) => {
     try {
       await sendRequest(`http://localhost:5001/api/lists/${listId}`, "DELETE", null, {
-        Authorization: "Bearer " + auth.token
+        Authorization: "Bearer " + auth.token,
       });
       fetchLists();
     } catch (err) {
@@ -88,9 +89,9 @@ const UserListSelectionPage = (props) => {
             type="button"
             onClick={() => onDelete(list.id)}
             variant="light"
-            className="ml-auto list-selection-page-delete"
+            className="ml-auto border-0"
           >
-            <span>x</span>
+            x
           </button>
         </div>
       </div>
@@ -106,9 +107,10 @@ const UserListSelectionPage = (props) => {
   return (
     <div className="list-selection-page-container">
       <ErrorModal showModal={error} errorMessage={error} hideModal={clearError} />
+      <HeaderCard />
       <Card className="list-selection-page-list">
         <Card.Header>
-          <h3>Your Lists</h3>
+          <h4>Your Lists</h4>
         </Card.Header>
         <ListGroup variant="flush">
           {listItems}

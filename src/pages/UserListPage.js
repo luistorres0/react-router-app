@@ -11,6 +11,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import AddItem from "../components/AddItem";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth-context";
+import HeaderCard from "../components/HeaderCard";
 
 const UserListPage = () => {
   const { listId } = useParams();
@@ -50,9 +51,9 @@ const UserListPage = () => {
             type="button"
             onClick={() => onDelete(item)}
             variant="light"
-            className="ml-auto list-selection-page-delete"
+            className="ml-auto border-0"
           >
-            <span>x</span>
+            x
           </button>
         </span>
       </ListGroup.Item>
@@ -110,9 +111,10 @@ const UserListPage = () => {
   return (
     <div className="list-page-container">
       <ErrorModal showModal={error} errorMessage={error} hideModal={clearError} />
+      <HeaderCard />
       <Card className="list-page-list">
         <Card.Header>
-          <h3>{todoList ? todoList.title : "Title"}</h3>
+          <h4>{todoList ? todoList.title : "Title"}</h4>
         </Card.Header>
         <ListGroup variant="flush">
           {listItems}

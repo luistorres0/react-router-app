@@ -1,0 +1,9 @@
+.header-card-container {
+  margin-bottom: 1.5rem;
+}
+
+.header-card {
+  width: 18rem;
+  margin: auto;
+  border: none;
+}
