@@ -9,7 +9,7 @@ import { useAuth } from "./hooks/auth-hook";
 
 function App() {
   const { token, login, logout, userId, name } = useAuth();
-
+  
   let routes;
 
   if (!token) {

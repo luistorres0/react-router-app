@@ -18,7 +18,7 @@ const MainNavigation = () => {
   const onDeleteAccount = async () => {
     setIsExpanded(false);
     try {
-      await sendRequest(`http://localhost:5001/api/users/${auth.userId}`, "DELETE", null, {
+      await sendRequest(`${process.env.REACT_APP_BACKEND_API}/users/${auth.userId}`, "DELETE", null, {
         Authorization: "Bearer " + auth.token,
       });
 

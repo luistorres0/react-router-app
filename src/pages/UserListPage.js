@@ -23,7 +23,7 @@ const UserListPage = () => {
   const fetchList = useCallback(async () => {
     try {
       const responseData = await sendRequest(
-        `http://localhost:5001/api/lists/${listId}`,
+        `${process.env.REACT_APP_BACKEND_API}/lists/${listId}`,
         "GET",
         null,
         {
@@ -73,7 +73,7 @@ const UserListPage = () => {
 
     try {
       await sendRequest(
-        `http://localhost:5001/api/lists/${listId}`,
+        `${process.env.REACT_APP_BACKEND_API}/lists/${listId}`,
         "PATCH",
         JSON.stringify({
           newList,
@@ -93,7 +93,7 @@ const UserListPage = () => {
 
     try {
       await sendRequest(
-        `http://localhost:5001/api/lists/${listId}`,
+        `${process.env.REACT_APP_BACKEND_API}/lists/${listId}`,
         "PATCH",
         JSON.stringify({
           newList,

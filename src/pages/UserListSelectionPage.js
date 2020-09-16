@@ -25,7 +25,7 @@ const UserListSelectionPage = (props) => {
   const fetchLists = useCallback(async () => {
     try {
       const responseData = await sendRequest(
-        `http://localhost:5001/api/lists/all/${auth.userId}`,
+        `${process.env.REACT_APP_BACKEND_API}/lists/all/${auth.userId}`,
         "GET",
         null,
         {
@@ -46,7 +46,7 @@ const UserListSelectionPage = (props) => {
   const onAdd = async (title) => {
     try {
       await sendRequest(
-        "http://localhost:5001/api/lists",
+        `${process.env.REACT_APP_BACKEND_API}/lists`,
         "POST",
         JSON.stringify({
           authorId: auth.userId,
@@ -65,7 +65,7 @@ const UserListSelectionPage = (props) => {
 
   const onDelete = async (listId) => {
     try {
-      await sendRequest(`http://localhost:5001/api/lists/${listId}`, "DELETE", null, {
+      await sendRequest(`${process.env.REACT_APP_BACKEND_API}/lists/${listId}`, "DELETE", null, {
         Authorization: "Bearer " + auth.token,
       });
       fetchLists();

@@ -89,7 +89,7 @@ const LoginPage = () => {
     if (isLoginMode) {
       try {
         const responseData = await sendRequest(
-          "http://localhost:5001/api/users/login",
+          `${process.env.REACT_APP_BACKEND_API}/users/login`,
           "POST",
           JSON.stringify({
             email: formState.inputs.email.value,
@@ -105,7 +105,7 @@ const LoginPage = () => {
     } else {
       try {
         const responseData = await sendRequest(
-          "http://localhost:5001/api/users/signup",
+          `${process.env.REACT_APP_BACKEND_API}/users/signup`,
           "POST",
           JSON.stringify({
             name: formState.inputs.name.value,
