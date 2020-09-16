@@ -8,6 +8,7 @@ import { useHttpClient } from "../hooks/http-hook";
 import LoadingSpinner from "./LoadingSpinner";
 import ErrorModal from "./ErrorModal";
 import { Nav, NavDropdown, Button } from "react-bootstrap";
+import Logo from "../assets/logo.png";
 
 const MainNavigation = () => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -18,9 +19,14 @@ const MainNavigation = () => {
   const onDeleteAccount = async () => {
     setIsExpanded(false);
     try {
-      await sendRequest(`${process.env.REACT_APP_BACKEND_API}/users/${auth.userId}`, "DELETE", null, {
-        Authorization: "Bearer " + auth.token,
-      });
+      await sendRequest(
+        `${process.env.REACT_APP_BACKEND_API}/users/${auth.userId}`,
+        "DELETE",
+        null,
+        {
+          Authorization: "Bearer " + auth.token,
+        }
+      );
 
       auth.logout();
     } catch (err) {}
@@ -42,7 +48,8 @@ const MainNavigation = () => {
 
       <Navbar expanded={isExpanded} bg="light" expand="lg">
         <NavLink to="/" className="navbar-brand">
-          Todolist
+          {/* Todolist */}
+          <img src={Logo} alt="logo" />
         </NavLink>
         {auth.isLoggedIn && (
           <React.Fragment>
