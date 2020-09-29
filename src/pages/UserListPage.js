@@ -58,14 +58,6 @@ const UserListPage = () => {
         </span>
       </ListGroup.Item>
     ));
-
-    if (listItems.length === 0) {
-      listItems = (
-        <ListGroup.Item>
-          <em>Create task.</em>
-        </ListGroup.Item>
-      );
-    }
   }
 
   const onAdd = async (newItem) => {
@@ -123,7 +115,7 @@ const UserListPage = () => {
             onSetAddModeOff={() => setIsAddMode(false)}
             onSetAddModeOn={() => setIsAddMode(true)}
             onAddItem={onAdd}
-            buttonText="New Todo"
+            buttonText="Add Todo"
             placeholderText="Enter a new Todo."
           />
         </ListGroup>

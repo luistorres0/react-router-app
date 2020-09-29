@@ -98,12 +98,6 @@ const UserListSelectionPage = (props) => {
     </ListGroup.Item>
   ));
 
-  let emptyListItem = (
-    <ListGroup.Item>
-      <em>Create a list.</em>
-    </ListGroup.Item>
-  );
-
   return (
     <div className="list-selection-page-container">
       <ErrorModal showModal={error} errorMessage={error} hideModal={clearError} />
@@ -114,14 +108,13 @@ const UserListSelectionPage = (props) => {
         </Card.Header>
         <ListGroup variant="flush">
           {listItems}
-          {listItems.length === 0 && emptyListItem}
           <AddItem
             isAddMode={isAddListMode}
             onSetAddModeOff={() => setIsAddListMode(false)}
             onSetAddModeOn={() => setIsAddListMode(true)}
             onAddItem={onAdd}
-            buttonText="New List"
-            placeholderText="Enter a new title."
+            buttonText="Create List"
+            placeholderText="Enter the list's title."
           />
         </ListGroup>
         {isLoading && (
